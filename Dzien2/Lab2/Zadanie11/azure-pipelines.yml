@@ -1,0 +1,41 @@
+trigger: 
+- main
+pool:
+  vmImage: ubuntu-latest
+variables:
+  backend_rg: "your_own_value"
+  backend_storage: "your_own_value"
+  backend_container: "your_own_value"
+  backend_key: "your_own_value"
+  subscription: "your_own_value"
+stages:
+  - stage: tf_plan_and_deploy
+    jobs:
+    - job: plan_and_apply
+      steps:
+        - task: TerraformInstaller@1
+          displayName: terraform_install
+          inputs:
+            terraformVersion: "latest"
+        - task: TerraformTaskV4@4
+          displayName: terraform_init
+          inputs:
+            provider: "azurerm"
+            command: "init"
+            backendServiceArm: $(subscription)
+            backendAzureRmResourceGroupName: $(backend_rg)
+            backendAzureRmStorageAccountName: $(backend_storage)
+            backendAzureRmContainerName: $(backend_container)
+            backendAzureRmKey: $(backend_key)
+        - task: TerraformTaskV4@4
+          displayName: plan
+          inputs:
+            provider: "azurerm"
+            command: "plan"
+            environmentServiceNameAzureRM: $(subscription)
+        - task: TerraformTaskV4@4
+          displayName: apply
+          inputs:
+            provider: "azurerm"
+            command: "apply"
+            environmentServiceNameAzureRM: $(subscription)

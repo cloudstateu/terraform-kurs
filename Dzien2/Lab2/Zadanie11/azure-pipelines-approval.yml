@@ -1,0 +1,75 @@
+trigger: 
+- main
+pool:
+  vmImage: ubuntu-latest
+variables:
+  backend_rg: "your_own_value"
+  backend_storage: "your_own_value"
+  backend_container: "your_own_value"
+  backend_key: "your_own_value"
+  subscription: "your_own_value"
+stages:
+  - stage: Terraform_Plan
+    jobs:
+    - job: plan
+      steps:
+        - task: TerraformInstaller@1
+          displayName: Terraform Install
+          inputs:
+            terraformVersion: "latest"
+        - task: TerraformTaskV4@4
+          displayName: Terraform Init
+          inputs:
+            provider: "azurerm"
+            command: "init"
+            backendServiceArm: $(subscription)
+            backendAzureRmResourceGroupName: $(backend_rg)
+            backendAzureRmStorageAccountName: $(backend_storage)
+            backendAzureRmContainerName: $(backend_container)
+            backendAzureRmKey: $(backend_key)
+        - task: TerraformTaskV4@4
+          displayName: Terraform Plan
+          inputs:
+            provider: "azurerm"
+            command: "plan"
+            commandOptions: '-out=$(Build.ArtifactStagingDirectory)/main.tfplan -detailed-exitcode'
+            environmentServiceNameAzureRM: $(subscription)
+        - task: PublishPipelineArtifact@1
+          displayName: Publish artifact
+          inputs:
+            targetPath: '$(Build.ArtifactStagingDirectory)'
+            publishLocation: 'pipeline'
+            artifactName: 'tf-artifacts-plan'
+  - stage: Terraform_Apply
+    dependsOn: 'Terraform_Plan'
+    condition: not(or(failed(), canceled()))
+    jobs:
+    - deployment: terraformExecute
+      displayName: 'Terraform apply'
+      environment: 'ExecutePlan'
+      strategy:
+          runOnce:
+            deploy:
+              steps:
+              - checkout: self
+              - task: TerraformInstaller@1
+                displayName: Terraform Install
+                inputs:
+                  terraformVersion: "latest"
+              - task: TerraformTaskV4@4
+                displayName: Terraform Init
+                inputs:
+                  provider: "azurerm"
+                  command: "init"
+                  backendServiceArm: $(subscription)
+                  backendAzureRmResourceGroupName: $(backend_rg)
+                  backendAzureRmStorageAccountName: $(backend_storage)
+                  backendAzureRmContainerName: $(backend_container)
+                  backendAzureRmKey: $(backend_key)
+              - task: TerraformTaskV4@4
+                displayName: Terraform Apply
+                inputs:
+                  provider: "azurerm"
+                  command: "apply"
+                  commandOptions: '-auto-approve $(Pipeline.Workspace)/tf-artifacts-plan/main.tfplan'
+                  environmentServiceNameAzureRM: $(subscription)

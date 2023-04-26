@@ -263,7 +263,9 @@ Pomocne linki:
 
 Celem tego zadania jest nauka wykorzystania potoków CI/CD do tworzenia infrastruktury za pomocą Terraform w Azure DevOps.
 
-**UWAGA: Do wykonania zadania potrzebny jest dostep do własnej organizacji w Azure DevOps oraz odpowiednie uprawnienia. Bieżący kurs nie przewiduje nadania dostępów dla kursantów dla środowisk Azure DevOps.**
+> UWAGA: Do wykonania zadania potrzebny jest dostep do własnej organizacji w Azure DevOps oraz odpowiednie uprawnienia. Bieżący kurs nie przewiduje nadania dostępów dla kursantów dla środowisk Azure DevOps.**
+
+> WAŻNE: Jeśli chcesz wykorzystać w pełnii demo przedstawione w pliku **azure-pipelines-approval.yml**, musisz wykonać dodatkowy krok w postaci stworzenia tzw. Environment w Azure DevOps- [LINK](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops). Jeśli nie chcesz wprowadzać żadnych zmian w pliku YAML, nazwij tworzony Environment jako **'ExecutePlan'**
 
 W tym zadaniu należy stworzyć potok CI/CD w Azure DevOps dla infrastruktury utrzymywanej za pomocą kodu Terraform, który będzie umożliwiał automatyczne tworzenie lub aktualizowanie zasobów w chmurze Azure. Potok powinien składać się z dwóch faz: Continuous Integration (CI) i Continuous Deployment (CD), zdefiniowanych w pliku konfiguracyjnym azure-pipelines.yml. Przykładowy plik ten znajduje się w bieżącej ścieżce repozytorium (Dzien2/Lab2/Zadanie11).
 

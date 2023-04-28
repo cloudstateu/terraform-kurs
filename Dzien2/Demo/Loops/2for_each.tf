@@ -30,3 +30,7 @@ resource "azurerm_linux_web_app" "app-service" {
     }
   }
 }
+
+locals {
+  linx_web_app1 = azurerm_linux_web_app.app-service["mz-super-app"]
+}

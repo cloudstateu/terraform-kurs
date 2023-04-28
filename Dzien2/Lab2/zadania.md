@@ -4,26 +4,21 @@ Celem tego zadania jest nauka korzystania z publicznych modułów.
 
 W tym zadaniu należy stworzyć maszynę wirtualną (Ubuntu) wykorzystując moduł: 
 https://registry.terraform.io/modules/Azure/compute/azurerm/latest. W tym celu wykorzystaj
-sieć `vnet-shared` oraz jej podsieć. Podczas tworzenia VM wustaw autentykację przy pomocy 
-hasła i ustaw rozmiar „Standard_D2as_v5”. Wyszukaj w dokumentacji jak ustawić te parametry. 
+sieć `vnet-shared` oraz jej podsieć. Podczas tworzenia VM ustaw autentykację przy pomocy 
+klucza ssh i ustaw rozmiar „Standard_D2as_v5”. Wyszukaj w dokumentacji jak ustawić te parametry. 
  
 Aby zrealizować to zadanie, należy wykonać następujące kroki:
 1. Utwórz nowy plik i nazwij go np. `vm.tf`.
 2. W nowym pliku stwórz blok module i korzystając z dokumentacji utwórz nową maszynę wirtualną z systemem Ubuntu 
-   (UbuntuServer), rozmiarem „Standard_D2as_v5” oraz z wykorzystaniem sieci wskazanej w treści zadania. 
-   Zdefiniuj preferowany sposób autentykacji np. hasło lub klucz ssh. 
+   (UbuntuServer), rozmiarem „Standard_D2as_v5”. Wykorzystaj sieć wskazaną w treści zadania. 
+   Zdefiniuj preferowany sposób autentykacji w postaci klucza ssh. 
    Link do dokumentacji: https://registry.terraform.io/modules/Azure/compute/azurerm/latest
 3. Aby zapewnić dostęp do tworzonej maszyny, otwórz potrzebny ruch (port) na Network Security Group (NSG), która jest powoływana w ramach modułu.
-   Użyj argumentu `remote_port` i wskaż odpwoiedni port:
-   * 22 w przypadku ssh,
-   * 3389 w przypadku RDP.
+   Użyj argumentu `remote_port` i wskaż odpwoiedni port (22 w przypadku ssh).
 4. Uruchom polecenie `terraform init` aby zinicjalizować moduł wykorzystywany w zadaniu.
 5. Standardowo uruchom polecenia `terraform plan` aby zweryfikować swoją konifgurację oraz `terraform apply` aby wdrożyć zmiany.
 6. Sprawdź w portalu jakie zasoby zostały utworzone za pomoca modułu.
-7. Spróbuj zalogować się do utworzonej maszyny. Użyj publicznego adresu IP maszyny. Do autentykacji użyj wskazanego w kodzie hasła oraz odpowiedniej nazwy
-   użytkownika lub wskaż klucz ssh. Nazwa użytkownika jest zdefiniowana w module i możesz odszukać ją w dokumentacji modułu.
-   * w przypadku ssh prawdpopodobnie skorzystasz z konsoli,
-   * w przypadku RDP wykrozystaj narzędzie Remote Desktop Connection lub pokrewne.
+7. Spróbuj zalogować się do utworzonej maszyny z poziomu lokalnej konsoli poprzez ssh. W tym celu użyj jej publicznego adresu IP.
 
 Pomocne linki:
 
@@ -39,7 +34,7 @@ zarówno od tworzonej w module sieci jak i od sieci `vnet-shared`.
 
 Zdefiniuj w module następujące zmienne:
 * vnet_name             - nazwa tworzonej sieci  
-* vnet_address_space    - zarkes adresacji tworzonej sieci
+* vnet_address_space    - zakres adresacji tworzonej sieci
 * rg_name               - nazwa wykorzystywanej w kursie resource grupy
 * location              - lokalizacja wykorzystywanych w kursie zasobów (np. z resource grupy)
 

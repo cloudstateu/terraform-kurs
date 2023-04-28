@@ -5,8 +5,8 @@ module "ubuntu" {
   vnet_subnet_id      = azurerm_subnet.shared-endpoints.id
   vm_size             = "Standard_D2as_v5"
 
-  admin_password = "mojehaslo123!"
-  enable_ssh_key = false
+  
+  enable_ssh_key = true
 
-  remote_port  = 3389
+  remote_port  = 22
 }

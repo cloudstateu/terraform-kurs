@@ -1,10 +1,10 @@
 variable "azure_private_zones" {
-  type = map(string)
+  type = map(bool)
   default = {
-    "privatelink.azure-automation.net"            = true
+    "privatelink.azure-automation.net"            = false
     "privatelink.database.windows.net"            = true
     "privatelink.sql.azuresynapse.net"            = true
-    "privatelink.dev.azuresynapse.net"            = true
+    "privatelink.dev.azuresynapse.net"            = false
     "privatelink.azuresynapse.net"                = true
     "privatelink.blob.core.windows.net"           = true
     "privatelink.file.core.windows.net"           = true
@@ -13,9 +13,9 @@ variable "azure_private_zones" {
     "privatelink.web.core.windows.net"            = true
     "privatelink.dfs.core.windows.net"            = true
     "privatelink.documents.azure.com"             = true
-    "privatelink.mongo.cosmos.azure.com"          = true
+    "privatelink.mongo.cosmos.azure.com"          = false
     "privatelink.cassandra.cosmos.azure.com"      = true
-    "privatelink.gremlin.cosmos.azure.com"        = true
+    "privatelink.gremlin.cosmos.azure.com"        = false
     "privatelink.table.cosmos.azure.com"          = true
     "privatelink.batch.azure.com"                 = true
     "privatelink.postgres.database.azure.com"     = true
@@ -30,7 +30,7 @@ variable "azure_private_zones" {
     "privatelink.siterecovery.windowsazure.com"   = true
     "privatelink.servicebus.windows.net"          = true
     "privatelink.azure-devices.net"               = true
-    "privatelink.eventgrid.azure.net"             = true
+    "privatelink.eventgrid.azure.net"             = false
     "privatelink.azurewebsites.net"               = true
     "privatelink.api.azureml.ms"                  = true
     "privatelink.notebooks.azure.net"             = true
@@ -39,7 +39,7 @@ variable "azure_private_zones" {
     "privatelink.oms.opinsights.azure.com"        = true
     "privatelink.ods.opinsights.azure.com"        = true
     "privatelink.agentsvc.azure-automation.net"   = true
-    "privatelink.cognitiveservices.azure.com"     = true
+    "privatelink.cognitiveservices.azure.com"     = false
     "afs.azure.net"                               = true
     "privatelink.datafactory.azure.net"           = true
     "privatelink.adf.azure.com"                   = true
@@ -68,7 +68,7 @@ variable "azure_private_zones" {
 resource "azurerm_private_dns_zone" "dns-priv-endpoint" {
   for_each            = { for zone, enabled in var.azure_private_zones : zone => enabled if enabled == true }
   name                = each.key
-  resource_group_name = azurerm_resource_group.rg-hub-dns.name
+  resource_group_name = azurerm_resource_group.hub-dns.name
 }
 
 locals {
